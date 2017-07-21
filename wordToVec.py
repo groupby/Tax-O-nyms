@@ -49,10 +49,11 @@ with open("/home/amir/Downloads/parsed2.json") as f:
         category = j['category']
         if query:
             tokens = query.split()
-            for token in tokens:
-                try:
-                    vector = model[token]
-                    printOutput(vector, category)
-                except KeyError:
-                    failedCount += 1
-                    pass
+            if (len(tokens)) == 1:
+                for token in tokens:
+                    try:
+                        vector = model[token]
+                        printOutput(vector, category)
+                    except KeyError:
+                        failedCount += 1
+                        pass
