@@ -4,56 +4,61 @@ import sys
 import gensim
 
 TOTAL_CATS = 9
+cat = {
+    "baby & child": 0,
+    "beauty": 1,
+    "diet & nutrition": 2,
+    "health & medicine": 3,
+    "home health care": 4,
+    "household & grocery": 5,
+    "personal care": 6,
+    "sexual health": 7,
+    "vitamins": 8
+}
 
 
-def loadCat():
-    cat = {
-        "baby & child": 0,
-        "beauty": 1,
-        "diet & nutrition": 2,
-        "health & medicine": 3,
-        "home health care": 4,
-        "household & grocery": 5,
-        "personal care": 6,
-        "sexual health": 7,
-        "vitamins": 8
-    }
+def printCatVec(categories):
 
-    return cat
+    count = 0
+    for key in cat:
+        matched = False
+        for category in categories:
+            if category[u"value"] == key:
+                sys.stdout.write(str(category[u"percentage"]))
+                matched = True
+        if not matched:
+            sys.stdout.write('0')
+        if count != TOTAL_CATS - 1:
+            sys.stdout.write(' ')
+        count += 1
+    print
 
 
 def printOutput(vectors, category):
-    cat = loadCat()
-    position = cat.get(category)
     for vector in vectors:
         sys.stdout.write(str(vector) + " ")
-    for i in range(0, TOTAL_CATS):
-        if position == i:
-            sys.stdout.write('1')
-        else:
-            sys.stdout.write('0')
-        if i != TOTAL_CATS - 1:
-            sys.stdout.write(' ')
-
-    sys.stdout.write('\n')
+    printCatVec(category)
 
 
 # Load Google's pre-trained Word2Vec model.
 model = gensim.models.Word2Vec.load_word2vec_format('/home/amir/dev/GoogleNews-vectors-negative300.bin', binary=True)
-failedCount = 0
-categories = loadCat()
-with open("/home/amir/Downloads/parsed2.json") as f:
-    for line in f:
-        j = json.loads(line)
-        query = j['query']
-        category = j['category']
-        if query:
-            tokens = query.split()
-            if (len(tokens)) == 1:
-                for token in tokens:
-                    try:
-                        vector = model[token]
-                        printOutput(vector, category)
-                    except KeyError:
-                        failedCount += 1
-                        pass
+def main():
+    failedCount = 0
+    with open("../percents") as f:
+        for line in f:
+            j = json.loads(str(line), "utf-8")
+            query = j['query']
+            category = j['category']
+            if query:
+                tokens = query.split()
+                if (len(tokens)) == 1:
+                    for token in tokens:
+                        try:
+                            vector = model[token]
+                            printOutput(vector, category)
+                        except KeyError:
+                            failedCount += 1
+                            pass
+
+
+main()

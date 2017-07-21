@@ -2,7 +2,7 @@
 
 
 var lineReader = require('readline').createInterface({
-    input: require('fs').createReadStream('input.json')
+    input: require('fs').createReadStream('input')
 });
 
 var cat = {
@@ -24,16 +24,22 @@ lineReader.on('line', function (line) {
         if (search.totalRecordCount > 0 && search.origin.search) {
             var query = search.query;
             var tokens = query.split(" ");
-            if (query && tokens.length == 1) {
+            if (query && tokens.length === 1) {
                 var availableNavigation = search.availableNavigation;
                 var nav1 = availableNavigation[0];
                 if (nav1.name === "categories.1") {
                     var category = [];
-                    for (var i = 0; i < nav1.refinements.length; i++) {
 
+                    var totalCount = 0;
+                    for (var i = 0; i < nav1.refinements.length; i++) {
+                        var refinement = nav1.refinements[i];
+                        totalCount += refinement.count;
+                    }
+
+                    for (var i = 0; i < nav1.refinements.length; i++) {
                         var refinement = nav1.refinements[i];
                         category.push({
-                            "value": refinement,
+                            "value": refinement.value,
                             "percentage": refinement.count / search.totalRecordCount
                         });
                     }
