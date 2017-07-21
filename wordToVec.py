@@ -44,7 +44,6 @@ model = gensim.models.Word2Vec.load_word2vec_format('/home/amir/dev/GoogleNews-v
 
 
 def main():
-    failedCount = 0
     with open("../outputMultiCat") as f:
         try:
             for line in f:
@@ -53,17 +52,18 @@ def main():
                 category = j['category']
                 if query:
                     tokens = query.split()
-                    if (len(tokens)) == 1:
-                        for token in tokens:
-                            try:
-                                vector = model[token]
-                                printOutput(vector, category)
-                            except KeyError:
-                                failedCount += 1
-                                pass
-        except KeyError:
+                    for token in tokens:
+                        try:
+                            vector = model[token]
+                            printOutput(vector, category)
+                        except KeyError, e:
+                            print e
+                            pass
+        except ValueError, e:
+            print e
             pass
-        except ValueError:
+        except KeyError, e:
+            print e
             pass
 
 
