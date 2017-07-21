@@ -35,4 +35,3 @@ with open("/home/amir/Downloads/parsed2.json") as f:
 print "done"
 
 # cl = NaiveBayesClassifier(train)
-
