@@ -2,7 +2,7 @@
 
 
 var lineReader = require('readline').createInterface({
-    input: require('fs').createReadStream('cvshealth-2017-04-13.ld.json')
+    input: require('fs').createReadStream('input.json')
 });
 
 var cat = {
