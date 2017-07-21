@@ -42,7 +42,7 @@ def printOutput(vectors, category):
 model = gensim.models.Word2Vec.load_word2vec_format('/home/amir/dev/GoogleNews-vectors-negative300.bin', binary=True)
 failedCount = 0
 categories = loadCat()
-with open("/home/amir/Downloads/parsedTotal.json") as f:
+with open("/home/amir/Downloads/uniqSearches.json") as f:
     for line in f:
         try:
             j = json.loads(line)
@@ -50,13 +50,12 @@ with open("/home/amir/Downloads/parsedTotal.json") as f:
             category = j['category']
             if query:
                 tokens = query.split()
-                if (len(tokens)) == 1:
-                    for token in tokens:
-                        try:
-                            vector = model[token]
-                            printOutput(vector, category)
-                        except KeyError:
-                            failedCount += 1
-                            pass
+                for token in tokens:
+                    try:
+                        vector = model[token]
+                        printOutput(vector, category)
+                    except KeyError:
+                        failedCount += 1
+                        pass
         except ValueError:
             pass
