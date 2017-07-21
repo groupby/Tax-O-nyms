@@ -51,19 +51,26 @@ def main(_):
     train_step = tf.train.GradientDescentOptimizer(learning_rate = learnningRate).minimize(cross_entropy)
 
     with tf.Session() as sess:
+        totalVector = []
         while True:
-            inputWord = input('Search term:')
-            testRunData = [model[inputWord]]
-            # sess.run(tf.global_variables_initializer())
-            saver.restore(sess, "./model_92/a")
-            # testRunData = np.reshape(testRunData,(1, dimension))
-            print("Running")
-            # c = tf.constant(1.0)
-            # c = tf.abs(y)
-            # sess.run(y, feed_dict={x: testRunData})
-            result = y.eval(feed_dict={x: testRunData}, session=sess)
-            temp = np.exp(result-np.max(result))
-            result = (temp/temp.sum())*100
+            inputString = input('Search term:')
+            inputWords = inputString.split()
+            for word in inputWords:
+                testRunData = [model[word]]
+                # sess.run(tf.global_variables_initializer())
+                saver.restore(sess, "./model_92/a")
+                # testRunData = np.reshape(testRunData,(1, dimension))
+                print("Running")
+                # sess.run(y, feed_dict={x: testRunData})
+                result = y.eval(feed_dict={x: testRunData}, session=sess)
+
+                if len(totalVector) == 0:
+                    totalVector = result
+                else:
+                    for elem in range(len(result)):
+                        totalVector[elem] += result[elem]
+            # temp = np.exp(result-np.max(result))
+            # result = (temp/temp.sum())*100
             print(result)
             getCategory(result)
 
