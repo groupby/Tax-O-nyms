@@ -18,7 +18,6 @@ cat = {
 
 
 def printCatVec(categories):
-
     count = 0
     for key in cat:
         matched = False
@@ -42,23 +41,30 @@ def printOutput(vectors, category):
 
 # Load Google's pre-trained Word2Vec model.
 model = gensim.models.Word2Vec.load_word2vec_format('/home/amir/dev/GoogleNews-vectors-negative300.bin', binary=True)
+
+
 def main():
     failedCount = 0
-    with open("../percents") as f:
-        for line in f:
-            j = json.loads(str(line), "utf-8")
-            query = j['query']
-            category = j['category']
-            if query:
-                tokens = query.split()
-                if (len(tokens)) == 1:
-                    for token in tokens:
-                        try:
-                            vector = model[token]
-                            printOutput(vector, category)
-                        except KeyError:
-                            failedCount += 1
-                            pass
+    with open("../outputMultiCat") as f:
+        try:
+            for line in f:
+                j = json.loads(str(line), "utf-8")
+                query = j['query']
+                category = j['category']
+                if query:
+                    tokens = query.split()
+                    if (len(tokens)) == 1:
+                        for token in tokens:
+                            try:
+                                vector = model[token]
+                                printOutput(vector, category)
+                            except KeyError:
+                                failedCount += 1
+                                pass
+        except KeyError:
+            pass
+        except ValueError:
+            pass
 
 
 main()
