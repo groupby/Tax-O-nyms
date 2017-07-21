@@ -3,8 +3,8 @@ data = []
 test = {'x':[], 'y':[]}
 index = 0
 
-dimension = 10;
-category = 5;
+dimension = 300;
+category = 9;
 
 def read(filename):
 	f = open(filename, 'r')
@@ -16,7 +16,7 @@ def read(filename):
 			numbers.append(float(number))
 		vectors.append(numbers)
 	for vec in vectors:
-		if (random.randint(0, 100) < 10):
+		if (random.randint(0, 100) < 40):
 			test['x'].append(vec[0:dimension])
 			test['y'].append(vec[dimension:dimension + category])
 		else:
