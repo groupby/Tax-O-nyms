@@ -61,10 +61,8 @@ def main(_):
                 saver.restore(sess, "./model_92/a")
                 # testRunData = np.reshape(testRunData,(1, dimension))
                 print("Running")
-                # c = tf.constant(1.0)
-                c = tf.abs(y)
                 # sess.run(y, feed_dict={x: testRunData})
-                result = c.eval(feed_dict={x: testRunData}, session=sess)
+                result = y.eval(feed_dict={x: testRunData}, session=sess)
 
                 if len(totalVector) == 0:
                     totalVector = result
